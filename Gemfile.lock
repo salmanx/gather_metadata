@@ -67,6 +67,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
+    blueprinter (1.1.0)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
     builder (3.3.0)
@@ -189,6 +190,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  blueprinter
   bootsnap
   puma (~> 5.0)
   puppeteer-ruby

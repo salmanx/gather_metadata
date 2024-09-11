@@ -14,6 +14,8 @@ gem "bootsnap", require: false
 gem 'subroutine', '~> 1.0', '>= 1.0.1'
 # to scrap webpage
 gem 'puppeteer-ruby'
+# JSON serializer
+gem 'blueprinter'
 
 # Ensure ruby style guide
 group :development, :test do
