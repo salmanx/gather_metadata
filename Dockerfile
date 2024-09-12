@@ -7,7 +7,8 @@ RUN apt-get update -qq && apt-get install -y \
     build-essential \
     libpq-dev \
     nodejs \
-    sqlite3
+    sqlite3 \
+    chromium
 
 WORKDIR /app
 
