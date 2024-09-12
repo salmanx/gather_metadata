@@ -1,54 +1,44 @@
 # frozen_string_literal: true
 
 class AssertionsController < ApplicationController
-  before_action :set_assertion, only: %i[show update destroy]
+  before_action :set_assertion, only: %i[fetch_snapshot]
 
-  # GET /assertions
   def index
-    @assertions = Assertion.all
+    assertions = Assertion.order(created_at: :desc)
 
-    render json: @assertions
+    render json: AssertionBlueprint.render(assertions)
   end
 
-  # GET /assertions/1
-  def show
-    render json: @assertion
-  end
-
-  # POST /assertions
   def create
-    @assertion = Assertion.new(assertion_params)
+    op = CreateAssertionOp.new(assertion_params)
 
-    if @assertion.save
-      render json: @assertion, status: :created, location: @assertion
+    if op.submit
+      render json: op.outputs, status: :created, location: @assertion
     else
-      render json: @assertion.errors, status: :unprocessable_entity
+      render json: { error: op.errors }, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /assertions/1
-  def update
-    if @assertion.update(assertion_params)
-      render json: @assertion
-    else
-      render json: @assertion.errors, status: :unprocessable_entity
-    end
-  end
+  def fetch_snapshot
+    snapshot_path = Rails.root.join(Rails.configuration.snapshot_folder, @assertion.snapshotUrl)
 
-  # DELETE /assertions/1
-  def destroy
-    @assertion.destroy
+    if File.exist?(snapshot_path)
+      send_file snapshot_path, type: 'image/png', disposition: 'inline'
+    else
+      render json: { error: 'Snapshot not found' }, status: :not_found
+    end
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_assertion
-    @assertion = Assertion.find(params[:id])
+    @assertion = Assertion.find_by(id: params[:id])
+    return if @assertion
+
+    render json: { error: 'Assertion not found' }, status: :not_found
   end
 
-  # Only allow a list of trusted parameters through.
   def assertion_params
-    params.require(:assertion).permit(:url, :text, :status, :snapshotUrl, :numLinks, :numImages)
+    params.require(:assertion).permit(:url, :text)
   end
 end
