@@ -17,6 +17,10 @@ gem 'puppeteer-ruby'
 # JSON serializer
 gem 'blueprinter'
 
+# Run background job using active job
+gem 'sidekiq'
+
+
 # Ensure ruby style guide
 group :development, :test do
   gem 'rubocop', require: false

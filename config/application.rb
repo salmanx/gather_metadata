@@ -40,5 +40,9 @@ module GatherMetadata
 
     # Save snapshot in public/snapshots folder
     config.snapshot_folder = 'public/snapshots'
+
+    # Background job adapter
+    config.active_job.queue_adapter = :sidekiq
+
   end
 end

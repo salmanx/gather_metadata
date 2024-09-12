@@ -3,11 +3,32 @@ version: "3"
 services:
   web:
     build: .
-    command: bundle exec rails server -b 0.0.0.0 -p 3000
+    command: sh -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0 -p 3000"
     volumes:
       - .:/app
     ports:
       - "3000:3000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    networks:
+      - app-network
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6.2
     networks:
       - app-network
 
