@@ -103,3 +103,7 @@ To run tests using RSpec:
 ```bash
 docker exec -it container_id bundle exec rspec
 ```
+
+###
+
+To check the implementation details and proof you can visit following merged [PR](https://github.com/salmanx/gather_metadata/pull/1)
